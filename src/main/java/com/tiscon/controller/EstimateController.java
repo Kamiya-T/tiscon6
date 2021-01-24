@@ -76,6 +76,10 @@ public class EstimateController {
      */
     @PostMapping(value = "submit", params = "confirm")
     String confirm(UserOrderForm userOrderForm, Model model) {
+        String strOld = userOrderForm.getOldPrefectureId();
+        String strNew = userOrderForm.getNewPrefectureId();
+        userOrderForm.setOldPrefectureId(strOld.format("%2s", strOld).replace(" ", "0"));
+        userOrderForm.setNewPrefectureId(strNew.format("%2s", strNew).replace(" ", "0"));
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
         model.addAttribute("userOrderForm", userOrderForm);
         return "confirm";
