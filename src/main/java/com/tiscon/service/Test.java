@@ -18,16 +18,10 @@ public class Test {
         try {
             // 埼玉県さいたま市の住所を取得
             response1 = pcs.getResponse("3300854");
-            System.out.println(response1.getPrefecture());
-            System.out.println(response1.getCity());
-            System.out.println(response1.getLatitude());
-            System.out.println(response1.getLongitude());
-
             // 埼玉県所沢市の住所を取得
             response2 = pcs.getResponse("3590000");
 
             int dis = Distance.getDistance(response1.getLatitude(), response1.getLongitude(), response2.getLatitude(), response2.getLongitude());
-            System.out.println(dis);
         } catch (IOException e) {
             // networkによるエラー発生時
             e.printStackTrace();

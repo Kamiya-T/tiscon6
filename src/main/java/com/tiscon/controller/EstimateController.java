@@ -4,7 +4,10 @@ import com.tiscon.dao.EstimateDao;
 import com.tiscon.dto.UserOrderDto;
 import com.tiscon.form.UserOrderForm;
 import com.tiscon.form.SimpleOrderForm;
+import com.tiscon.service.Distance;
 import com.tiscon.service.EstimateService;
+import com.tiscon.service.PostalCodeService;
+import com.tiscon.service.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.io.IOException;
 
 /**
  * 引越し見積もりのコントローラークラス。
@@ -78,18 +83,44 @@ public class EstimateController {
      * @param model 遷移先に連携するデータ
      * @return 遷移先
      */
-    @PostMapping(value = "submit", params = "calculation")
+    // param修正！！
+    // html value
+    @PostMapping(value = "simple_result", params = "calculation")
     String simple_calculation(@Validated SimpleOrderForm simpleOrderForm, BindingResult result, Model model) {
+        PostalCodeService pcs = new PostalCodeService();
+        Response response1;
+        Response response2;
+        int dis;
+
         if (result.hasErrors()) {
             model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
             model.addAttribute("simpleOrderForm", simpleOrderForm);
-            return "confirm";
+            return "simple_input";
         }
+
+        try {
+            // 埼玉県さいたま市の住所を取得
+            response1 = pcs.getResponse("3300854");
+            // 埼玉県所沢市の住所を取得
+            response2 = pcs.getResponse("3590000");
+            dis = Distance.getDistance(response1.getLatitude(), response1.getLongitude(), response2.getLatitude(), response2.getLongitude());
+        } catch (IOException e) {
+            // networkによるエラー発生時
+            // simple_inputに返してもエラーが表示されないので、処理を追加する必要あり
+            return "simple_input";
+        } catch (Exception e) {
+            // 存在しない郵便番号が入力された時
+            // simple_inputに返してもエラーが表示されないので、処理を追加する必要あり
+            return "simple_input";
+        }
+
         // 料金の計算を行う。
         UserOrderForm userOrderForm = estimateService.simpleToUser(simpleOrderForm);
         UserOrderDto dto = new UserOrderDto();
+
+        //この関数動作する？
         BeanUtils.copyProperties(userOrderForm, dto);
-        Integer price[] = estimateService.getPrice(dto);
+        Integer price[] = estimateService.getPriceFromDistance(dto, dis);
 
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
         model.addAttribute("userOrderForm", userOrderForm);
@@ -97,7 +128,22 @@ public class EstimateController {
         model.addAttribute("distancePrice", price[1]);
         model.addAttribute("cargoPrice", price[2]);
         model.addAttribute("optionPrice", price[3]);
-        return "result";
+        return "simple_result";
+    }
+
+    /**
+     * simple_resultから詳細入力画面に遷移。
+     *
+     * @param userOrderForm 顧客が入力した見積もり依頼情報
+     * @param model         遷移先に連携するデータ
+     * @return 遷移先
+     */
+    // 以下、入力！！
+    @PostMapping(value = "result", params = "backToInput")
+    String sendInput(UserOrderForm userOrderForm, Model model) {
+        model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
+        model.addAttribute("userOrderForm", userOrderForm);
+        return "input";
     }
 
     /**
