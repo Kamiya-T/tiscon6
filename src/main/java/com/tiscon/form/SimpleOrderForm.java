@@ -56,6 +56,14 @@ public class SimpleOrderForm {
         return box;
     }
 
+    public void setmovingDate(String box) {
+        this.newPostalCode = movingDate;
+    }
+
+    public String getmovingDate() {
+        return movingDate;
+    }
+
     public void setBox(String box) {
         this.box = box;
     }
