@@ -143,7 +143,7 @@ public class EstimateController {
      * @return 遷移先
      */
     // 以下、入力！！
-    @PostMapping(value = "submit", params = "input")
+    @PostMapping(value = "input", params = "input")
     String sendInput(UserOrderForm userOrderForm, Model model) {
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
         model.addAttribute("userOrderForm", userOrderForm);
