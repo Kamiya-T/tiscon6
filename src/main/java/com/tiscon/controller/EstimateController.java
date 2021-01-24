@@ -1,5 +1,6 @@
 package com.tiscon.controller;
 
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.tiscon.dao.EstimateDao;
 import com.tiscon.dto.UserOrderDto;
 import com.tiscon.form.UserOrderForm;
@@ -115,7 +116,8 @@ public class EstimateController {
         }
 
         // 料金の計算を行う。
-        UserOrderForm userOrderForm = estimateService.simpleToUser(simpleOrderForm);
+        UserOrderForm userOrderForm = new UserOrderForm();
+        BeanUtils.copyProperties(simpleOrderForm, userOrderForm);
         UserOrderDto dto = new UserOrderDto();
 
         //この関数動作する？
@@ -213,7 +215,7 @@ public class EstimateController {
 
             model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
             model.addAttribute("userOrderForm", userOrderForm);
-            return "confirm";
+            return "simple_result";
         }
         // 料金の計算を行う。
         UserOrderDto dto = new UserOrderDto();
