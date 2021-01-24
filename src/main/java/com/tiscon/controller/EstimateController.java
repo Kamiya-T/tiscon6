@@ -34,7 +34,7 @@ public class EstimateController {
     /**
      * コンストラクタ
      *
-     * @param estimateDAO EstimateDaoクラス
+     * @param estimateDAO     EstimateDaoクラス
      * @param estimateService EstimateServiceクラス
      */
     public EstimateController(EstimateDao estimateDAO, EstimateService estimateService) {
@@ -46,24 +46,6 @@ public class EstimateController {
     String index(Model model) {
         return "top";
     }
-
-    /**
-     * 入力画面に遷移する。
-     *
-     * @param model 遷移先に連携するデータ
-     * @return 遷移先
-     */
-    // @GetMapping("input")
-    /*
-    String inputaa(Model model) {
-        if (!model.containsAttribute("userOrderForm")) {
-            model.addAttribute("userOrderForm", new UserOrderForm());
-        }
-
-        model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-        return "input";
-    }
-    */
 
     /**
      * 入力画面に遷移する。Simple Version
@@ -86,9 +68,7 @@ public class EstimateController {
      * @param model 遷移先に連携するデータ
      * @return 遷移先
      */
-    // param修正！！
-    // html value
-    @PostMapping(value = "simple_result", params = "calculation")
+    @PostMapping(value = "submit1", params = "calculation")
     String simple_calculation(@Validated SimpleOrderForm simpleOrderForm, BindingResult result, Model model) {
         PostalCodeService pcs = new PostalCodeService();
         Response response1;
@@ -134,16 +114,22 @@ public class EstimateController {
         model.addAttribute("optionPrice", price[3]);
         return "simple_result";
     }
+    // 入力画面からTOPに遷移する
+
+    @PostMapping(value = "submit1", params = "backToTop")
+    String inputoTop(Model model) {
+        return "top";
+    }
 
     /**
      * simple_resultから詳細入力画面に遷移。
      *
-     * @param sof 顧客が入力した見積もり依頼情報
-     * @param model         遷移先に連携するデータ
+     * @param sof   顧客が入力した見積もり依頼情報
+     * @param model 遷移先に連携するデータ
      * @return 遷移先
      */
     // 以下、入力！！
-    @PostMapping(value = "input", params = "input")
+    @PostMapping(value = "result", params = "end")
     String sendInput(SimpleOrderForm sof, Model model) {
         UserOrderForm uof = new UserOrderForm();
         uof.setBicycle(sof.getBicycle());
@@ -161,121 +147,6 @@ public class EstimateController {
         model.addAttribute("userOrderForm", uof);
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
         return "input";
-    }
-    /*
-     public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getOldPrefectureId() {
-        return oldPrefectureId;
-    }
-
-    public void setOldPrefectureId(String oldPrefectureId) {
-        this.oldPrefectureId = oldPrefectureId;
-    }
-
-    public String getOldAddress() {
-        return oldAddress;
-    }
-
-    public void setOldAddress(String oldAddress) {
-        this.oldAddress = oldAddress;
-    }
-
-    public String getNewPrefectureId() {
-        return newPrefectureId;
-    }
-
-    public void setNewPrefectureId(String newPrefectureId) {
-        this.newPrefectureId = newPrefectureId;
-    }
-
-    public String getNewAddress() {
-        return newAddress;
-    }
-
-    public void setNewAddress(String newAddress) {
-        this.newAddress = newAddress;
-    }
-
-    public String getBox() {
-        return box;
-    }
-
-    public void setBox(String box) {
-        this.box = box;
-    }
-
-    public String getBed() {
-        return bed;
-    }
-
-    public void setBed(String bed) {
-        this.bed = bed;
-    }
-
-    public String getBicycle() {
-        return bicycle;
-    }
-
-    public void setBicycle(String bicycle) {
-        this.bicycle = bicycle;
-    }
-
-    public String getWashingMachine() {
-        return washingMachine;
-    }
-
-    public void setWashingMachine(String washingMachine) {
-        this.washingMachine = washingMachine;
-    }
-
-    public boolean getWashingMachineInstallation() {
-        return washingMachineInstallation;
-    }
-
-    public void setWashingMachineInstallation(boolean washingMachineInstallation) {
-        this.washingMachineInstallation = washingMachineInstallation;
-    }
-    public String getMovingDate() {
-        return movingDate;
-    }
-
-    public void setMovingDate(String movingDate) { this.movingDate = movingDate; }
-}
-
-
-     */
-    /**
-     * TOP画面に戻る。
-     *
-     * @param model 遷移先に連携するデータ
-     * @return 遷移先
-     */
-    @PostMapping(value = "submit", params = "backToTop")
-    String backToTop(Model model) {
-        return "top";
     }
 
     /**
@@ -295,17 +166,30 @@ public class EstimateController {
     /**
      * 入力画面に戻る。
      *
-     * @param userOrderForm 顧客が入力した見積もり依頼情報
+     * @param simpleOrderForm 顧客が入力した見積もり依頼情報
      * @param model         遷移先に連携するデータ
      * @return 遷移先
-
-    @PostMapping(value = "result", params = "backToInput")
-    String backToInput(UserOrderForm userOrderForm, Model model) {
-        model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-        model.addAttribute("userOrderForm", userOrderForm);
-        return "input";
-    }
      */
+    @PostMapping(value = "result", params = "backToInput")
+    String backToInput(SimpleOrderForm simpleOrderForm, Model model) {
+        model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
+        if (!model.containsAttribute("SimpleOrderForm")) {
+            model.addAttribute("SimpleOrderForm", simpleOrderForm);
+        }
+        return "simple_input";
+    }
+
+    /**
+     * TOP画面に遷移する。
+     * @return 遷移先
+     */
+
+    @PostMapping(value = "submit", params = "backToTop")
+    String DetailInputToTop () {
+        return "top";
+    }
+
+
     /**
      * 確認画面に戻る。
      *
@@ -313,42 +197,13 @@ public class EstimateController {
      * @param model         遷移先に連携するデータ
      * @return 遷移先
      */
-    @PostMapping(value = "order", params = "backToConfirm")
-    String backToConfirm(UserOrderForm userOrderForm, Model model) {
+    @PostMapping(value = "order", params = "backToInput")
+    String backToConfirm (UserOrderForm userOrderForm, Model model){
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
         model.addAttribute("userOrderForm", userOrderForm);
-        return "confirm";
+        return "input";
     }
 
-    /**
-     * 概算見積もり画面に遷移する。
-     *
-     * @param userOrderForm 顧客が入力した見積もり依頼情報
-     * @param result        精査結果
-     * @param model         遷移先に連携するデータ
-     * @return 遷移先
-     */
-    @PostMapping(value = "result", params = "calculation")
-    String calculation(@Validated UserOrderForm userOrderForm, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-
-            model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-            model.addAttribute("userOrderForm", userOrderForm);
-            return "simple_result";
-        }
-        // 料金の計算を行う。
-        UserOrderDto dto = new UserOrderDto();
-        BeanUtils.copyProperties(userOrderForm, dto);
-        Integer price[] = estimateService.getPrice(dto);
-
-        model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-        model.addAttribute("userOrderForm", userOrderForm);
-        model.addAttribute("price", price[0]);
-        model.addAttribute("distancePrice",price[1]);
-        model.addAttribute("cargoPrice",price[2]);
-        model.addAttribute("optionPrice",price[3]);
-        return "result";
-    }
 
     /**
      * 申し込み完了画面に遷移する。
@@ -359,7 +214,7 @@ public class EstimateController {
      * @return 遷移先
      */
     @PostMapping(value = "order", params = "complete")
-    String complete(@Validated UserOrderForm userOrderForm, BindingResult result, Model model) {
+    String complete (@Validated UserOrderForm userOrderForm, BindingResult result, Model model){
         if (result.hasErrors()) {
             model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
             model.addAttribute("userOrderForm", userOrderForm);
@@ -373,4 +228,4 @@ public class EstimateController {
         return "complete";
     }
 
-}
+    }
