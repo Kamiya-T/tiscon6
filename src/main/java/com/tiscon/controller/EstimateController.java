@@ -46,10 +46,26 @@ public class EstimateController {
      * @param model 遷移先に連携するデータ
      * @return 遷移先
      */
-    @GetMapping("input")
+    // @GetMapping("input")
     String input(Model model) {
         if (!model.containsAttribute("userOrderForm")) {
             model.addAttribute("userOrderForm", new UserOrderForm());
+        }
+
+        model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
+        return "input";
+    }
+
+    /**
+     * 入力画面に遷移する。
+     *
+     * @param model 遷移先に連携するデータ
+     * @return 遷移先
+     */
+    @GetMapping("input")
+    String simple_input(Model model) {
+        if (!model.containsAttribute("SimpleOrderForm")) {
+            model.addAttribute("SimpleOrderForm", new UserOrderForm());
         }
 
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
