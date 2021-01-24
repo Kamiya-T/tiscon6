@@ -56,11 +56,11 @@ public class SimpleOrderForm {
         return box;
     }
 
-    public void setmovingDate(String movingDate) {
+    public void setMovingDate(String movingDate) {
         this.movingDate = movingDate;
     }
 
-    public String getmovingDate() {
+    public String getMovingDate() {
         return movingDate;
     }
 

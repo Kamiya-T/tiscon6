@@ -54,6 +54,7 @@ public class EstimateController {
      * @return 遷移先
      */
     // @GetMapping("input")
+    /*
     String inputaa(Model model) {
         if (!model.containsAttribute("userOrderForm")) {
             model.addAttribute("userOrderForm", new UserOrderForm());
@@ -62,6 +63,7 @@ public class EstimateController {
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
         return "input";
     }
+    */
 
     /**
      * 入力画面に遷移する。Simple Version
@@ -114,18 +116,18 @@ public class EstimateController {
             // simple_inputに返してもエラーが表示されないので、処理を追加する必要あり
             return "simple_input";
         }
-
+        /*
         // 料金の計算を行う。
         UserOrderForm userOrderForm = new UserOrderForm();
-        BeanUtils.copyProperties(simpleOrderForm, userOrderForm);
+        userOrderForm = estimateService.simpleToUser(simpleOrderForm);
         UserOrderDto dto = new UserOrderDto();
-
+        */
         //この関数動作する？
-        BeanUtils.copyProperties(userOrderForm, dto);
-        Integer price[] = estimateService.getPriceFromDistance(dto, dis);
+        //BeanUtils.copyProperties(userOrderForm, dto);
+        Integer price[] = estimateService.getPriceFromDistance(simpleOrderForm, dis);
 
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-        model.addAttribute("userOrderForm", userOrderForm);
+        model.addAttribute("SimpleOrderForm", simpleOrderForm);
         model.addAttribute("price", price[0]);
         model.addAttribute("distancePrice", price[1]);
         model.addAttribute("cargoPrice", price[2]);
@@ -141,7 +143,7 @@ public class EstimateController {
      * @return 遷移先
      */
     // 以下、入力！！
-    @PostMapping(value = "result", params = "backToInput")
+    @PostMapping(value = "submit", params = "input")
     String sendInput(UserOrderForm userOrderForm, Model model) {
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
         model.addAttribute("userOrderForm", userOrderForm);

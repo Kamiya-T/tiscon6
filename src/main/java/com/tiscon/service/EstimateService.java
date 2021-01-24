@@ -68,18 +68,18 @@ public class EstimateService {
     /**
      * 見積もり依頼に応じた概算見積もりを行う。
      *
-     * @param dto 見積もり依頼情報
+     * @param sof 見積もり依頼情報
      * @return 概算見積もり結果の料金
      */
-    public Integer[] getPriceFromDistance(UserOrderDto dto, Integer dis) {
+    public Integer[] getPriceFromDistance(SimpleOrderForm sof, Integer dis) {
         int distanceInt = dis;
 
         // 距離当たりの料金を算出する
         int priceForDistance = distanceInt * PRICE_PER_DISTANCE;
-        int boxes = getBoxForPackage(dto.getBox(), PackageType.BOX)
-                + getBoxForPackage(dto.getBed(), PackageType.BED)
-                + getBoxForPackage(dto.getBicycle(), PackageType.BICYCLE)
-                + getBoxForPackage(dto.getWashingMachine(), PackageType.WASHING_MACHINE);
+        int boxes = getBoxForPackage(Integer.parseInt(sof.getBox()), PackageType.BOX)
+                + getBoxForPackage(Integer.parseInt(sof.getBed()), PackageType.BED)
+                + getBoxForPackage(Integer.parseInt(sof.getBicycle()), PackageType.BICYCLE)
+                + getBoxForPackage(Integer.parseInt(sof.getWashingMachine()), PackageType.WASHING_MACHINE);
 
         // 箱に応じてトラックの種類が変わり、それに応じて料金が変わるためトラック料金を算出する。
 
@@ -88,11 +88,11 @@ public class EstimateService {
         // オプションサービスの料金を算出する。
         int priceForOptionalService = 0;
 
-        if (dto.getWashingMachineInstallation()) {
+        if (sof.getWashingMachineInstallation()) {
             priceForOptionalService = estimateDAO.getPricePerOptionalService(OptionalServiceType.WASHING_MACHINE.getCode());
         }
         //System.out.print(priceForOptionalService);
-        double seasonCoefficient = estimateDAO.getSeasonCoefficient(dto.getMovingDate());
+        double seasonCoefficient = estimateDAO.getSeasonCoefficient(sof.getMovingDate());
         Integer returnInt[] = {(int)((priceForDistance + pricePerTruck) * seasonCoefficient + priceForOptionalService),
                                (int)(priceForDistance*seasonCoefficient),(int)(pricePerTruck*seasonCoefficient),priceForOptionalService};
         return returnInt;

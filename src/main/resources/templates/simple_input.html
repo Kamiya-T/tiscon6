@@ -15,9 +15,6 @@
 <div class="container">
     <form th:action="@{/simple_result}" th:object="${SimpleOrderForm}" class="form-horizontal" method="post">
         <h1>お見積り情報入力</h1>
-        <ul th:if="${#fields.hasErrors('all')}">
-            <li th:each="err : ${#fields.errors('all')}" th:text="${err}"></li>
-        </ul>
         <div class="col-sm-12">
             <legend>情報入力</legend>
                 <div class="form-group">
