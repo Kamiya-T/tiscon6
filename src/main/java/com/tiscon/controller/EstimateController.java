@@ -47,7 +47,7 @@ public class EstimateController {
      * @return 遷移先
      */
     // @GetMapping("input")
-    String input(Model model) {
+    String inputaa(Model model) {
         if (!model.containsAttribute("userOrderForm")) {
             model.addAttribute("userOrderForm", new UserOrderForm());
         }
@@ -62,15 +62,45 @@ public class EstimateController {
      * @param model 遷移先に連携するデータ
      * @return 遷移先
      */
-    @GetMapping("input")
-    String simple_input(Model model) {
+    @GetMapping("simple_input")
+    String input(Model model) {
         if (!model.containsAttribute("SimpleOrderForm")) {
-            model.addAttribute("SimpleOrderForm", new UserOrderForm());
+            model.addAttribute("UserOrderForm", new UserOrderForm());
         }
 
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-        return "input";
+        return "simple_input";
     }
+
+    /**
+     * 簡易的なお見積り画面に遷移する。
+     *
+     * @param model 遷移先に連携するデータ
+     * @return 遷移先
+     */
+    @PostMapping(value = "submit", params = "calculation")
+    String simple_calculation(@Validated UserOrderForm userOrderForm, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+
+            model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
+            model.addAttribute("userOrderForm", userOrderForm);
+            return "confirm";
+        }
+        // 料金の計算を行う。
+        UserOrderDto dto = new UserOrderDto();
+        BeanUtils.copyProperties(userOrderForm, dto);
+        Integer price[] = estimateService.getPrice(dto);
+
+        model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
+        model.addAttribute("userOrderForm", userOrderForm);
+        model.addAttribute("price", price[0]);
+        model.addAttribute("distancePrice",price[1]);
+        model.addAttribute("cargoPrice",price[2]);
+        model.addAttribute("optionPrice",price[3]);
+        return "result";
+    }
+
+
 
     /**
      * TOP画面に戻る。
