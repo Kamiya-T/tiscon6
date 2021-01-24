@@ -19,8 +19,7 @@
             <li th:each="err : ${#fields.errors('all')}" th:text="${err}"></li>
         </ul>
         <div class="col-sm-12">
-            <fieldset>
-                <legend>情報入力</legend>
+            <legend>情報入力</legend>
                 <div class="form-group">
                     <label for="box">転居元郵便番号</label>
                     <input type="text" id="oldPostalCode" name="oldPostalCode" th:field="*{oldPostalCode}" class="form-control" value="10"/>
@@ -29,6 +28,10 @@
                     <label for="box">転居先郵便番号</label>
                     <input type="text" id="newPostalCode" name="newPostalCode" th:field="*{newPostalCode}" class="form-control" value="10"/>
                 </div>
+                <div class="form-group">
+                    <label for="movingDate">引っ越し日</label>
+                    <input type="date" id="movingDate" name="movingDate" th:field="*{movingDate}" class="form-control" value="2021-01-23"/>
+                 </div>
                 <div class="form-group">
                     <label for="box">段ボールの個数</label>
                     <input type="text" id="box" name="box" th:field="*{box}" class="form-control" value="10"/>
@@ -53,7 +56,6 @@
                         <option th:value="true" th:text="あり">あり</option>
                     </select>
                 </div>
-            </fieldset>
             <div class="form-group">
                 <div class="text-center">
                     <button type="submit" name="backToTop" class="btn btn-primary">TOPへ戻る</button>

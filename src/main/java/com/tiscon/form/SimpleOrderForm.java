@@ -33,6 +33,9 @@ public class SimpleOrderForm {
     @NotNull
     private boolean washingMachineInstallation;
 
+    @NotBlank
+    private String  movingDate;
+
     public String getOldPostalCode() {
         return oldPostalCode;
     }
