@@ -58,6 +58,12 @@ public class UserOrderForm {
     @NotBlank
     private String  movingDate;
 
+    @NotBlank
+    private String  oldPostalCode;
+
+    @NotBlank
+    private String  newPostalCode;
+
     public String getCustomerName() {
         return customerName;
     }
@@ -133,6 +139,24 @@ public class UserOrderForm {
     public String getBicycle() {
         return bicycle;
     }
+
+
+    public void setOldPostalCode(String OldPostalCode) {
+        this.oldPostalCode = oldPostalCode;
+    }
+
+    public String getOldPostalCode() {
+        return oldPostalCode;
+    }
+
+    public void setNewPostalCode(String newPostalCode) {
+        this.newPostalCode = newPostalCode;
+    }
+
+    public String getNewPostalCode() {
+        return newPostalCode;
+    }
+
 
     public void setBicycle(String bicycle) {
         this.bicycle = bicycle;

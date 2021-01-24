@@ -138,18 +138,135 @@ public class EstimateController {
     /**
      * simple_resultから詳細入力画面に遷移。
      *
-     * @param userOrderForm 顧客が入力した見積もり依頼情報
+     * @param sof 顧客が入力した見積もり依頼情報
      * @param model         遷移先に連携するデータ
      * @return 遷移先
      */
     // 以下、入力！！
     @PostMapping(value = "input", params = "input")
-    String sendInput(UserOrderForm userOrderForm, Model model) {
+    String sendInput(SimpleOrderForm sof, Model model) {
+        UserOrderForm uof = new UserOrderForm();
+        uof.setBicycle(sof.getBicycle());
+
+        uof.setOldPostalCode(sof.getOldPostalCode());
+        uof.setNewPostalCode(sof.getNewPostalCode());
+        uof.setMovingDate(sof.getMovingDate());
+
+        uof.setBox(sof.getBox());
+        uof.setBed(sof.getBed());
+        uof.setBicycle(sof.getBicycle());
+        uof.setWashingMachine(sof.getWashingMachine());
+        uof.setWashingMachineInstallation(sof.getWashingMachineInstallation());
+
+        model.addAttribute("userOrderForm", uof);
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-        model.addAttribute("userOrderForm", userOrderForm);
         return "input";
     }
+    /*
+     public String getCustomerName() {
+        return customerName;
+    }
 
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getOldPrefectureId() {
+        return oldPrefectureId;
+    }
+
+    public void setOldPrefectureId(String oldPrefectureId) {
+        this.oldPrefectureId = oldPrefectureId;
+    }
+
+    public String getOldAddress() {
+        return oldAddress;
+    }
+
+    public void setOldAddress(String oldAddress) {
+        this.oldAddress = oldAddress;
+    }
+
+    public String getNewPrefectureId() {
+        return newPrefectureId;
+    }
+
+    public void setNewPrefectureId(String newPrefectureId) {
+        this.newPrefectureId = newPrefectureId;
+    }
+
+    public String getNewAddress() {
+        return newAddress;
+    }
+
+    public void setNewAddress(String newAddress) {
+        this.newAddress = newAddress;
+    }
+
+    public String getBox() {
+        return box;
+    }
+
+    public void setBox(String box) {
+        this.box = box;
+    }
+
+    public String getBed() {
+        return bed;
+    }
+
+    public void setBed(String bed) {
+        this.bed = bed;
+    }
+
+    public String getBicycle() {
+        return bicycle;
+    }
+
+    public void setBicycle(String bicycle) {
+        this.bicycle = bicycle;
+    }
+
+    public String getWashingMachine() {
+        return washingMachine;
+    }
+
+    public void setWashingMachine(String washingMachine) {
+        this.washingMachine = washingMachine;
+    }
+
+    public boolean getWashingMachineInstallation() {
+        return washingMachineInstallation;
+    }
+
+    public void setWashingMachineInstallation(boolean washingMachineInstallation) {
+        this.washingMachineInstallation = washingMachineInstallation;
+    }
+    public String getMovingDate() {
+        return movingDate;
+    }
+
+    public void setMovingDate(String movingDate) { this.movingDate = movingDate; }
+}
+
+
+     */
     /**
      * TOP画面に戻る。
      *
