@@ -7,6 +7,8 @@ import com.tiscon.domain.Customer;
 import com.tiscon.domain.CustomerOptionService;
 import com.tiscon.domain.CustomerPackage;
 import com.tiscon.dto.UserOrderDto;
+import com.tiscon.form.SimpleOrderForm;
+import com.tiscon.form.UserOrderForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,7 +95,6 @@ public class EstimateService {
         }
         //System.out.print(priceForOptionalService);
         double seasonCoefficient = estimateDAO.getSeasonCoefficient(dto.getMovingDate());
-
         Integer returnInt[] = {(int)((priceForDistance + pricePerTruck) * seasonCoefficient + priceForOptionalService),
                                (int)(priceForDistance*seasonCoefficient),(int)(pricePerTruck*seasonCoefficient),priceForOptionalService};
         return returnInt;
@@ -109,5 +110,22 @@ public class EstimateService {
      */
     private int getBoxForPackage(int packageNum, PackageType type) {
         return packageNum * estimateDAO.getBoxPerPackage(type.getCode());
+    }
+    /**
+     * SimpleOrderFormをUserOrderFormに変換する
+     *
+     * @param simpleForm 変換元のSimpleForm
+     * @return userForm 返還後のuserOrderForm
+     */
+    public UserOrderForm simpleToUser(SimpleOrderForm simpleForm){
+        UserOrderForm userForm = new UserOrderForm();
+        userForm.setOldPrefectureId(simpleForm.getOldPostalCode());
+        userForm.setNewPrefectureId(simpleForm.getNewPostalCode());
+        userForm.setBox(simpleForm.getBicycle());
+        userForm.setBed(simpleForm.getBed());
+        userForm.setBicycle(simpleForm.getBicycle());
+        userForm.setWashingMachine(simpleForm.getWashingMachine());
+        userForm.setWashingMachineInstallation(simpleForm.getWashingMachineInstallation());
+        return userForm;
     }
 }

@@ -3,6 +3,7 @@ package com.tiscon.controller;
 import com.tiscon.dao.EstimateDao;
 import com.tiscon.dto.UserOrderDto;
 import com.tiscon.form.UserOrderForm;
+import com.tiscon.form.SimpleOrderForm;
 import com.tiscon.service.EstimateService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,7 @@ public class EstimateController {
     }
 
     /**
-     * 入力画面に遷移する。
+     * 入力画面に遷移する。Simple Version
      *
      * @param model 遷移先に連携するデータ
      * @return 遷移先
@@ -65,11 +66,10 @@ public class EstimateController {
     @GetMapping("input")
     String simple_input(Model model) {
         if (!model.containsAttribute("SimpleOrderForm")) {
-            model.addAttribute("SimpleOrderForm", new UserOrderForm());
+            model.addAttribute("SimpleOrderForm", new SimpleOrderForm());
         }
-
         model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
-        return "input";
+        return "simple_input";
     }
 
     /**
@@ -136,7 +136,6 @@ public class EstimateController {
     @PostMapping(value = "result", params = "calculation")
     String calculation(@Validated UserOrderForm userOrderForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
-
             model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
             model.addAttribute("userOrderForm", userOrderForm);
             return "confirm";
@@ -166,7 +165,6 @@ public class EstimateController {
     @PostMapping(value = "order", params = "complete")
     String complete(@Validated UserOrderForm userOrderForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
-
             model.addAttribute("prefectures", estimateDAO.getAllPrefectures());
             model.addAttribute("userOrderForm", userOrderForm);
             return "confirm";
